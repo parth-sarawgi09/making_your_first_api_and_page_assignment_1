@@ -1,39 +1,36 @@
-// Boilerplate Code for Virtual Assistant API
 const express = require('express');
 const app = express();
+const PORT = 8000;
 
-/*
-Task:
-You need to build an API for a virtual assistant that provides customized responses.
+app.use(express.json());
+// Function to get a cheerful message based on the day
+function getDayMessage() {
+    const days = [
+        "Sunday: A day to relax and recharge!",
+        "Monday: Start the week strong!",
+        "Tuesday: Keep the momentum going!",
+        "Wednesday: Midweek vibes are the best!",
+        "Thursday: Almost there!",
+        "Friday: Time to wrap up and celebrate!",
+        "Saturday: Enjoy your weekend!"
+    ];
+    const today = new Date().getDay(); // 0 = Sunday, ..., 6 = Saturday
+    return days[today];
+}
 
-Requirements:
-1. Create a GET endpoint at "/assistant/greet".
-2. The endpoint should accept a "name" as a query parameter (e.g., /assistant/greet?name=John).
-3. The API should return a JSON response with:
-   a. A personalized greeting using the name provided.
-   b. A cheerful message based on the current day of the week.
+// Define the GET /assistant/greet endpoint
+app.get('/assistant/greet', (req, res) => {
+    const name = req.query.name || "Guest";
+    const greeting = `Hello, ${name}! Hope you're having a fantastic day!`;
+    const dayMessage = getDayMessage();
 
-Example Responses:
-- For Monday:
-  {
-    "welcomeMessage": "Hello, John! Welcome to our assistant app!",
-    "dayMessage": "Happy Monday! Start your week with energy!"
-  }
-- For Friday:
-  {
-    "welcomeMessage": "Hello, John! Welcome to our assistant app!",
-    "dayMessage": "It's Friday! The weekend is near!"
-  }
-- For other days:
-  {
-    "welcomeMessage": "Hello, John! Welcome to our assistant app!",
-    "dayMessage": "Have a wonderful day!"
-  }
-
-Add the required logic below to complete the API.
-*/
-
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Virtual Assistant API is running on http://localhost:${PORT}`);
+    res.send({
+        greeting,
+        dayMessage
+    });
 });
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+}); 
